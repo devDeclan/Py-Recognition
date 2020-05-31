@@ -47,6 +47,7 @@ class Pool:
     Feed video ids into the download queue.
     :return:    None.
     """
+
     if self.classes is None:
       downloader.download_class_parallel(None, self.videos_dict, self.directory, self.videos_queue)
     else:
@@ -76,12 +77,7 @@ class Pool:
 
     # start download workers
     for _ in range(self.num_workers):
-      worker = Process(
-        target=video_worker,
-        args=(
-          self.videos_queue, self.failed_queue,
-          self.compress, self.log_file)
-      )
+      worker = Process(target=video_worker, args=(self.videos_queue, self.failed_queue, self.compress, self.log_file))
       worker.start()
       self.workers.append(worker)
 
@@ -115,16 +111,15 @@ def video_worker(videos_queue, failed_queue, compress, log_file):
   """
 
   while True:
-    try:
-      request = videos_queue.get(timeout=60*5) # Timeout after 5 minutes
+    request = videos_queue.get()
 
-      if request is None:
-        break
+    if request is None:
+      break
 
-      video_id, directory, start, end = request
+    video_id, directory, start, end = request
 
-      if not downloader.process_video(video_id, directory, start, end, compress=compress, log_file=log_file):
-        failed_queue.put(video_id)
+    if not downloader.process_video(video_id, directory, start, end, compress=compress, log_file=log_file):
+      failed_queue.put(video_id)
 
 def write_failed_worker(failed_queue, failed_save_file):
   """
@@ -135,7 +130,7 @@ def write_failed_worker(failed_queue, failed_save_file):
   """
 
   file = open(failed_save_file, "a")
-  
+
   while True:
     video_id = failed_queue.get()
 
@@ -143,5 +138,5 @@ def write_failed_worker(failed_queue, failed_save_file):
       break
 
     file.write("{}\n".format(video_id))
-  
+
   file.close()

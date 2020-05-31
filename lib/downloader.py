@@ -14,18 +14,10 @@ def download_video(video_id, download_path, video_format="mp4", log_file=None):
     stderr = subprocess.DEVNULL
   else:
     stderr = open(log_file, "a")
-  
+
   return_code = subprocess.call(
-    [
-      "youtub-dl",
-      "https://youtube.com/watch?v={}".format(video_id),
-      "--quiet", "-f",
-      "bestvideo[ext={},height<=360]/best".format(video_format),
-      "--output", download_path,
-      "--no-continue"
-    ],
-    stderr=stderr
-  )
+    ["youtube-dl", "https://youtube.com/watch?v={}".format(video_id), "--quiet", "-f",
+     "bestvideo[ext={}]+bestaudio/best".format(video_format), "--output", download_path, "--no-continue"], stderr=stderr)
   success = return_code == 0
 
   if log_file is not None:
@@ -107,6 +99,7 @@ def process_video(video_id, directory, start, end, video_format="mp4", compress=
   os.remove(download_path)
 
   if compress:
+    # compress the video slice
     return compress_video(slice_path)
 
   return True
