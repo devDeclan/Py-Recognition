@@ -122,4 +122,7 @@ score = model.evaluate(X_test, y_test, verbose=0)
 print('Test loss:', score[0])
 print('Test accuracy:', score[1])
 
+with open('model_001_trained.json', 'w') as json_file:
+  json_file.write(model.to_json())
+
 model.save('lit.hdf5')
