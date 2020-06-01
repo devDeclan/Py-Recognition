@@ -2,6 +2,7 @@ import os
 from multiprocessing import Process, Queue
 
 import lib.downloader as downloader
+from tqdm import tqdm
 
 class Pool:
   """
@@ -76,7 +77,7 @@ class Pool:
       self.failed_save_worker.start()
 
     # start download workers
-    for _ in range(self.num_workers):
+    for _ in tqdm(range(self.num_workers)):
       worker = Process(target=video_worker, args=(self.videos_queue, self.failed_queue, self.compress, self.log_file))
       worker.start()
       self.workers.append(worker)
