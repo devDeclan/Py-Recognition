@@ -18,7 +18,7 @@ def download_video(video_id, download_path, video_format="mp4", log_file=None):
   return_code = subprocess.call(
     ["youtube-dl", "https://youtube.com/watch?v={}".format(video_id),
     "-f", "bestvideo[ext={}]+bestaudio/best".format(video_format),
-    "--proxy", "86.62.120.68",
+    "--proxy", "103.216.82.206:6666",
     "--output", download_path,
     "--no-continue"], stderr=stderr)
   success = return_code == 0
