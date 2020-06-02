@@ -51,7 +51,7 @@ def download_classes(classes, num_workers, failed_save_file, compress, verbose, 
   :return:                      None.
   """
 
-  for list_path, save_root in zip([config.TRAIN_METADATA_PATH, config.VAL_METADATA_PATH],
+  for list_path, save_root in zip([config.TRAIN_METADATA_PATH, config.VALID_METADATA_PATH],
                                         [config.TRAIN_ROOT, config.VALID_ROOT]):
     with open(list_path) as file:
       data = json.load(file)
