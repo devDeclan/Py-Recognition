@@ -32,7 +32,7 @@ def main(args):
 
   # load lists of videos
   train_metadata = utils.load_json(config.TRAIN_METADATA_PATH)
-  val_metadata = utils.load_json(config.VAL_METADATA_PATH)
+  val_metadata = utils.load_json(config.VALID_METADATA_PATH)
   test_metadata = utils.load_json(config.TEST_METADATA_PATH)
 
   num_found = 0
